@@ -1,25 +1,45 @@
+//! Import dependencies
 const createError = require("http-errors");
 const express = require("express");
 const path = require("path");
 const cookieParser = require("cookie-parser");
 const logger = require("morgan");
+const mongoose = require("mongoose");
+const dotenv = require("dotenv").config();
 
+//! Import Routes
 const indexRouter = require("./routes/index");
 const usersRouter = require("./routes/users");
 
+//! Express init
 const app = express();
 
-// view engine setup
+//! MongoDB Setup
+const cluster = process.env.MONGODB_CLUSTER;
+const host = process.env.MONGODB_HOST;
+const user = encodeURIComponent(process.env.MONGODB_USER);
+const pass = encodeURIComponent(process.env.MONGODB_PASS);
+
+const mongoDB = `mongodb+srv://${user}:${pass}@${cluster}${host}`;
+
+async function main(db) {
+  await mongoose.connect(db);
+}
+// MonogDB init connection
+main(mongoDB).catch((err) => console.log(err));
+
+//! view engine setup
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "pug");
 
+//! Middlewares
 app.use(logger("dev"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
 
-// routes
+//! Routes
 app.use("/", indexRouter);
 app.use("/users", usersRouter);
 
