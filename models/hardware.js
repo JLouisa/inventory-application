@@ -7,9 +7,9 @@ const HardwareSchema = new Schema({
   description: { type: String, required: true },
   category: { type: Schema.Types.ObjectId, ref: "Category", required: true },
   price: { type: Number, required: true },
-  sku: { type: Number },
-  productID: { type: String, required: true },
-  specifications: { type: String, required: true },
+  numberInStock: { type: Number },
+  sku: { type: String, required: true },
+  specifications: { type: Array, required: true },
   locations: { type: Schema.Types.ObjectId, ref: "Location", required: true },
 });
 

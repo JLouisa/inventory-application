@@ -40,7 +40,7 @@ async function main() {
 
 //! Category
 // Create category function
-async function categoryCreate(index, name) {
+async function categoryCreate(index, name, description) {
   const category = new Category({ name: name, description: description });
   if (description != false) category.description = description;
   await category.save();
@@ -52,12 +52,12 @@ async function categoryCreate(index, name) {
 async function popCategory() {
   console.log("Adding categories");
   await Promise.all([
-    categoryCreate(0, "Processors"),
-    categoryCreate(1, "Graphics Cards"),
-    categoryCreate(2, "Motherboards"),
-    categoryCreate(3, "RAM"),
-    categoryCreate(4, "Storage Drives"),
-    categoryCreate(5, "Power Supplies"),
+    categoryCreate(0, "Processors", "High-performance CPUs for fast and efficient computing."),
+    categoryCreate(1, "Graphics Cards", "Powerful GPUs for exceptional gaming and graphics rendering."),
+    categoryCreate(2, "Motherboards", "Mainboards with advanced features for building PCs."),
+    categoryCreate(3, "RAM", "High-capacity memory modules for smooth multitasking."),
+    categoryCreate(4, "Storage Drives", "Fast and reliable storage solutions for data and applications."),
+    categoryCreate(5, "Power Supplies", "Efficient PSUs for consistent and stable power delivery to your PC."),
   ]);
 }
 
@@ -95,7 +95,10 @@ async function popManufacturer() {
       RAM: "Lifetime warranty for seamless multitasking.",
       "Power Supplies": "4-year warranty for consistent power delivery.",
     }),
-    manufacturerCreate(4, "be quiet!", "Jones", "2012-01-16", "Glinde, Schleswig-Holstein, Germany", false),
+    manufacturerCreate(4, "be quiet!", "2012-01-16", "Glinde, Schleswig-Holstein, Germany", {
+      RAM: "Lifetime warranty for seamless multitasking.",
+      "Power Supplies": "4-year warranty for consistent power delivery.",
+    }),
     manufacturerCreate(5, "Corsair Gaming, Inc.", "2023-05-05", "Fremont, California, United States", {
       "Graphics Cards": "1-year warranty for high-quality graphics.",
       Motherboards: "5-year warranty for reliable connectivity and stability.",
@@ -113,7 +116,7 @@ async function popManufacturer() {
       RAM: "6-year warranty for high-quality RAM Sticks",
       "Power Supplies": "7-year warranty for consistent power delivery.",
     }),
-    manufacturerCreate(8, "Micron Technology, Inc.", "2008-18-11", "Boise, Idaho, United States", {
+    manufacturerCreate(8, "Micron Technology, Inc.", "2008-1-11", "Boise, Idaho, United States", {
       RAM: "Lifetime warranty for seamless multitasking.",
     }),
     manufacturerCreate(9, "Micro-Star International Co. Ltd.", "2020-12-1", "Zhonghe District, Taipei, Taiwan", {
@@ -157,9 +160,9 @@ async function locationCreate(index, name, address, capacity) {
 async function popLocation() {
   console.log("Adding locations");
   await Promise.all([
-    locationCreate(0, "TechHub Warehouse", 5000),
-    locationCreate(1, "Silicon Valley Storage Facility", 12000),
-    locationCreate(2, "East Coast Distribution Center", 7900),
+    locationCreate(0, "TechHub Warehouse", "1234 Tech Street, Techville, TX 12345", 5000),
+    locationCreate(1, "Silicon Valley Storage Facility", "5678 Data Drive, Silicon City, CA 54321", 12000),
+    locationCreate(2, "East Coast Distribution Center", "9876 Server Road, Data Beach, NY 67890", 7900),
   ]);
 }
 
@@ -172,8 +175,8 @@ async function hardwareCreate(
   description,
   category,
   price,
+  numberInStock,
   sku,
-  productID,
   specifications,
   locations
 ) {
@@ -183,11 +186,11 @@ async function hardwareCreate(
     description: description,
     category: category,
     price: price,
-    productID: productID,
+    sku: sku,
     specifications: specifications,
     locations: locations,
   });
-  if (sku != false) hardware.sku = sku;
+  if (numberInStock != false) hardware.numberInStock = numberInStock;
   await hardware.save();
   hardwares[index] = hardware;
   console.log(`Added hardware: ${name}`);
@@ -201,11 +204,11 @@ async function popHardware() {
       0,
       "AMD Radeon RX 7900 XTX",
       manufacturers[0],
-      "Built on the groundbreaking AMD RDNA™ 3 architecture with chiplet technology.",
+      "The Most Advanced Graphics for Gamers & Creators.",
       categories[1],
       1139,
       233,
-      uuid.v4(),
+      uuidv4(),
       [
         "Compute Units: 96",
         "Ray Accelerators: 96",
@@ -225,7 +228,7 @@ async function popHardware() {
       categories[0],
       599,
       123,
-      uuid.v4(),
+      uuidv4(),
       ["Cores: 16", "Threads: 24", "Base Clock: 3.2 GHz", "Max Turbo Boost: 5.2 GHz", "Cache: 30MB", "TDP: 125W"],
       locations[0]
     ),
@@ -238,7 +241,7 @@ async function popHardware() {
       categories[1],
       899,
       78,
-      uuid.v4(),
+      uuidv4(),
       ["CUDA Cores: 8704", "Boost Clock: 1710 MHz", "Memory: 10GB GDDR6X", "Ray Tracing Cores: 68", "TDP: 320W"],
       locations[1]
     ),
@@ -251,7 +254,7 @@ async function popHardware() {
       categories[2],
       169,
       45,
-      uuid.v4(),
+      uuidv4(),
       [
         "Form Factor: ATX",
         "CPU Socket: AM4",
@@ -269,7 +272,7 @@ async function popHardware() {
       categories[3],
       89,
       345,
-      uuid.v4(),
+      uuidv4(),
       ["Capacity: 16GB (2 x 8GB)", "Speed: 3200 MHz", "CAS Latency: 16", "Voltage: 1.35V"],
       locations[0]
     ),
@@ -282,7 +285,7 @@ async function popHardware() {
       categories[4],
       149,
       23,
-      uuid.v4(),
+      uuidv4(),
       ["Capacity: 1TB", "Read Speed: up to 3500 MB/s", "Write Speed: up to 2500 MB/s", "Interface: M.2 PCIe 3.0 x4"],
       locations[1]
     ),
@@ -295,7 +298,7 @@ async function popHardware() {
       categories[0],
       449,
       112233,
-      uuid.v4(),
+      uuidv4(),
       ["Cores: 8", "Threads: 16", "Base Clock: 3.8 GHz", "Max Turbo Boost: 4.7 GHz", "Cache: 36MB", "TDP: 105W"],
       locations[2]
     ),
@@ -308,7 +311,7 @@ async function popHardware() {
       categories[1],
       239,
       334,
-      uuid.v4(),
+      uuidv4(),
       ["CUDA Cores: 1408", "Boost Clock: 1785 MHz", "Memory: 6GB GDDR5", "TDP: 125W"],
       locations[0]
     ),
@@ -321,7 +324,7 @@ async function popHardware() {
       categories[2],
       79,
       223,
-      uuid.v4(),
+      uuidv4(),
       [
         "Form Factor: Micro ATX",
         "CPU Socket: AM4",
@@ -339,7 +342,7 @@ async function popHardware() {
       categories[3],
       149,
       111,
-      uuid.v4(),
+      uuidv4(),
       ["Capacity: 32GB (2 x 16GB)", "Speed: 3600 MHz", "CAS Latency: 16", "Voltage: 1.35V"],
       locations[2]
     ),
@@ -352,7 +355,7 @@ async function popHardware() {
       categories[4],
       249,
       55,
-      uuid.v4(),
+      uuidv4(),
       ["Capacity: 2TB", "Read Speed: up to 3500 MB/s", "Write Speed: up to 2500 MB/s", "Interface: M.2 PCIe 3.0 x4"],
       locations[0]
     ),
@@ -365,7 +368,7 @@ async function popHardware() {
       categories[0],
       399,
       667,
-      uuid.v4(),
+      uuidv4(),
       ["Cores: 8", "Threads: 16", "Base Clock: 3.6 GHz", "Max Turbo Boost: 5.0 GHz", "Cache: 16MB", "TDP: 125W"],
       locations[1]
     ),
@@ -378,12 +381,12 @@ async function popHardware() {
       categories[2],
       299,
       777,
-      uuid.v4(),
+      uuidv4(),
       ["Compute Units: 32", "Boost Clock: 2589 MHz", "Memory: 8GB GDDR6", "TDP: 160W"],
       locations[2]
     ),
     // Hardware Variation 13
-    await hardwareCreate(
+    hardwareCreate(
       13,
       "MSI MPG B550 Gaming Edge WiFi",
       manufacturers[9],
@@ -391,7 +394,7 @@ async function popHardware() {
       categories[2],
       179,
       88,
-      uuid.v4(),
+      uuidv4(),
       [
         "Form Factor: ATX",
         "CPU Socket: AM4",
@@ -409,7 +412,7 @@ async function popHardware() {
       categories[4],
       299,
       99,
-      uuid.v4(),
+      uuidv4(),
       ["Capacity: 2TB", "Read Speed: up to 6600 MB/s", "Write Speed: up to 5000 MB/s", "Interface: M.2 PCIe 4.0 x4"],
       locations[1]
     ),
@@ -422,12 +425,12 @@ async function popHardware() {
       categories[5],
       44,
       121,
-      uuid.v4(),
+      uuidv4(),
       ["Wattage: 600W", "80+ White Certified", "Cable Length: 48cm", "Connectors: 2x PCIe 8-pin, 3x SATA"],
       locations[2]
     ),
     // Hardware Variation 16
-    await hardwareCreate(
+    hardwareCreate(
       16,
       "NVIDIA Quadro RTX 4000",
       manufacturers[1],
@@ -435,7 +438,7 @@ async function popHardware() {
       categories[1],
       899,
       567,
-      uuid.v4(),
+      uuidv4(),
       ["CUDA Cores: 2304", "Boost Clock: 1605 MHz", "Memory: 8GB GDDR6", "TDP: 160W"],
       locations[0]
     ),
@@ -448,7 +451,7 @@ async function popHardware() {
       categories[2],
       79,
       333,
-      uuid.v4(),
+      uuidv4(),
       [
         "Form Factor: Micro ATX",
         "CPU Socket: LGA 1200",
@@ -466,7 +469,7 @@ async function popHardware() {
       categories[3],
       159,
       222,
-      uuid.v4(),
+      uuidv4(),
       ["Capacity: 32GB (2 x 16GB)", "Speed: 3200 MHz", "CAS Latency: 16", "Voltage: 1.35V"],
       locations[2]
     ),
@@ -479,7 +482,7 @@ async function popHardware() {
       categories[4],
       99,
       111,
-      uuid.v4(),
+      uuidv4(),
       ["Capacity: 1TB", "Read Speed: up to 560 MB/s", "Write Speed: up to 530 MB/s", "Interface: SATA 6Gb/s"],
       locations[0]
     ),
@@ -492,7 +495,7 @@ async function popHardware() {
       categories[5],
       54,
       777,
-      uuid.v4(),
+      uuidv4(),
       ["Wattage: 550W", "80+ Bronze Certified", "Cable Length: 48cm", "Connectors: 2x PCIe 8-pin, 6x SATA"],
       locations[1]
     ),
@@ -505,7 +508,7 @@ async function popHardware() {
       categories[1],
       1599,
       98,
-      uuid.v4(),
+      uuidv4(),
       ["CUDA Cores: 10496", "Boost Clock: 1785 MHz", "Memory: 24GB GDDR6X", "TDP: 350W"],
       locations[2]
     ),
@@ -518,7 +521,7 @@ async function popHardware() {
       categories[2],
       299,
       222,
-      uuid.v4(),
+      uuidv4(),
       [
         "Form Factor: ATX",
         "CPU Socket: LGA 1200",
@@ -536,7 +539,7 @@ async function popHardware() {
       categories[3],
       179,
       884,
-      uuid.v4(),
+      uuidv4(),
       ["Capacity: 32GB (2 x 16GB)", "Speed: 3600 MHz", "CAS Latency: 18", "Voltage: 1.35V"],
       locations[1]
     ),
@@ -549,7 +552,7 @@ async function popHardware() {
       categories[4],
       129,
       187,
-      uuid.v4(),
+      uuidv4(),
       ["Capacity: 1TB", "Read Speed: up to 7000 MB/s", "Write Speed: up to 5000 MB/s", "Interface: M.2 PCIe 4.0 x4"],
       locations[2]
     ),
