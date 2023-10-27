@@ -1,0 +1,33 @@
+import mongoose from "mongoose";
+const { Schema } = mongoose;
+
+const HardwareSchema = new Schema({
+  name: { type: String, required: true },
+  manufacturer: { type: Schema.Types.ObjectId, ref: "Manufacturer", required: true },
+  description: { type: String, required: true },
+  category: { type: Schema.Types.ObjectId, ref: "Category", required: true },
+  price: { type: Number, required: true },
+  sku: { type: Number },
+  productID: { type: String, required: true },
+  specifications: { type: String },
+  warrantyInformation: { type: String },
+  locations: { type: Schema.Types.ObjectId, ref: "Location", required: true },
+});
+
+// Virtual for book's URL
+HardwareSchema.virtual("url").get(function () {
+  // We don't use an arrow function as we'll need the this object
+  return `/catalog/hardware/${this._id}`;
+});
+
+// Virtual field to get warrantyInformation from the manufacturer
+HardwareSchema.virtual("warrantyInformation").get(function () {
+  if (this.manufacturer) {
+    // Assuming a Manufacturer model
+    return this.manufacturer.warranties[this.category]; // Combine warranties from the manufacturer
+  }
+  return "No warranty information available";
+});
+
+// Export model
+module.exports = mongoose.model("Hardware", HardwareSchema);
