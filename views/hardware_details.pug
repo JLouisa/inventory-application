@@ -4,12 +4,14 @@ block content
     h1= title
     p= text
     p Category: 
-        strong=category
+        strong
+            a(href="/category/"+category._id) #{category.name}
     ul Specifications: 
         each val in specifications
             li= val
-    p= warranty
+    p Warranty: #{warranty}
     p Price: € 
         strong= price
     p Quantity available: #{stock}
-    p Manufacturer: #{manufacturer}
+    p Manufacturer: 
+        a(href="/manufacturer/"+manufacturer._id) #{manufacturer.name}

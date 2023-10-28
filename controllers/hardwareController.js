@@ -19,10 +19,10 @@ exports.product = asyncHandler(async function (req, res, next) {
   res.render("hardware_details", {
     title: hardware.name,
     text: hardware.description,
-    category: hardware.category.name,
+    category: hardware.category,
     specifications: hardware.specifications,
     warranty: hardware.warrantyInformation,
-    manufacturer: hardware.manufacturer.name,
+    manufacturer: hardware.manufacturer,
     price: Number(hardware.price).toFixed(2),
     stock: hardware.numberInStock,
   });

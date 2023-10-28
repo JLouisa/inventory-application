@@ -22,11 +22,13 @@ HardwareSchema.virtual("url").get(function () {
 // Virtual field to get warrantyInformation from the manufacturer
 HardwareSchema.virtual("warrantyInformation").get(function () {
   if (this.manufacturer) {
-    // Assuming a Manufacturer model
-    this.manufacturer.warranties.forEach((element) => {
-      if (element === this.category) return;
-    });
-    return this.manufacturer.warranties[this.category]; // Combine warranties from the manufacturer
+    const keys = Object.keys(this.manufacturer.warranties);
+    for (const key of keys) {
+      if (key === this.category.name) {
+        const value = this.manufacturer.warranties[key];
+        return value;
+      }
+    }
   }
   return "No warranty information available";
 });

@@ -1,8 +1,69 @@
+:root {
+  --fontColor: #fff;
+  --bgColor: #333;
+  --bgColorLight: #777;
+}
+
 body {
-  padding: 50px;
+  padding: 0;
   font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+  background-color: var(--bgColor);
+  color: var(--fontColor);
 }
 
 a {
-  color: #00B7FF;
+  color: inherit;
+  text-decoration: none;
+}
+
+nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 2px solid var(--fontColor);
+  padding: 1em;
+}
+
+.logo {
+  font-size: 1.5rem;
+  font-weight: 700;
+}
+
+.navItems {
+  display: flex;
+  gap: 1em;
+  list-style-type: none;
+}
+
+li {
+  text-decoration: none;
+  color: inherit;
+  font-size: 1.2rem;
+  font-weight: 700;
+}
+
+li:hover {
+  text-decoration: underline;
+}
+
+main {
+  display: flex;
+  gap: 3em;
+  padding: 2em;
+}
+
+.mainContent {
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+}
+
+footer {
+  border-top: 2px solid var(--fontColor);
+}
+
+footer p {
+  font-size: 2rem;
+  text-align: center;
+  padding: 1em;
 }

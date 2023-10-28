@@ -1,0 +1,10 @@
+extends layout
+
+block content
+  h1= category.name
+  p= category.description
+  p
+    ul 
+      each val in products
+        li
+          a(href="/catalog/hardware/"+val._id) #{val.name}

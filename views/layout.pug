@@ -7,8 +7,8 @@ html
     link(rel='stylesheet', href='/stylesheets/style.css')
   body
     nav
-      p Computer Parts Shop
-      ul
+      div(class='logo') Computer Parts Shop
+      ul(class="navItems")
         li
             a(href='/') Home
         li
@@ -20,6 +20,17 @@ html
         li
             a(href='/locations') Locations
     main
-      block content
+      section(class='sidebar')
+        li
+          a(href='/catalog/create') Create Products
+        li
+          a(href='/categories/create') Create Categories
+        li
+          a(href='/manufacturers/create') Create Manufacturers
+        li
+          a(href='/locations/create') Create Locations
+      section(class='mainContent')
+        block content
+
     footer
       p © 2023 Jonathan Louisa

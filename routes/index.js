@@ -12,18 +12,7 @@ router.get("/", function (req, res, next) {
 /* GET category page. */
 router.get("/category", categoryController.category);
 
-/* GET manufacturer page. */
-router.get("/manufacturer", function (req, res, next) {
-  res.render("manufacturer", {
-    title: "Here goes the manufacturer",
-  });
-});
-
-/* GET locations page. */
-router.get("/locations", function (req, res, next) {
-  res.render("locations", {
-    title: "Here goes the locations",
-  });
-});
+/* GET category details page. */
+router.get("/category/:id", categoryController.categoryDetails);
 
 module.exports = router;

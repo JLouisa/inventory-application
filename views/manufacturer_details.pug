@@ -1,0 +1,15 @@
+extends layout
+
+block content
+  h1= theManufacturer.name
+  p Address: #{theManufacturer.address}
+  p Joined Date: #{theManufacturer.joinedDate}
+  p Products: 
+    ul
+      each val in allProducts
+        li
+          a(href="/catalog/hardware/"+val._id) #{val.name}
+  p Warranties: 
+    ul
+      each val in theManufacturer.theWarranties
+        li= val

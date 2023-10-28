@@ -2,3 +2,9 @@ extends layout
 
 block content
   h1= title
+  p= text
+  p
+    ul
+      each val in allManufacturer
+        li
+          a(href=val.url) #{val.name}
