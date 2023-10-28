@@ -3,6 +3,12 @@ extends layout
 block content
     h1= title
     p= text
-    ul
-        each val in hardware.specifications
+    p Category: 
+        strong=category
+    ul Specifications: 
+        each val in specifications
             li= val
+    p Price: € 
+        strong= price
+    p Quantity available: #{stock}
+    p Manufacturer: #{manufacturer}
