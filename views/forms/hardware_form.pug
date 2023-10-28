@@ -1,0 +1,37 @@
+extends ../layout
+
+block content
+    h1= title
+    p= text
+    div(class='hardwareForms')
+        form(Method="POST" action="" class="theform")
+            if errors
+                    ul
+                        each error in errors
+                            li= error.msg
+            label(for="name") Name: 
+            input(type='text' name="name" placeholder="Name" value=oldHardware && oldHardware.name ? oldHardware.name: "")
+            label(for="description") description: 
+            textarea(name="description" cols="30" rows="10" placeholder="description" value=oldHardware && oldHardware.description ? oldHardware.description: "")
+            label(for="price") price: 
+            input(type='number' name="price" placeholder="1000" value=oldHardware && oldHardware.price ? oldHardware.price: "")
+            label(for="numberInStock") Number in Stock: 
+            input(type='number' name="numberInStock" placeholder="50" value=oldHardware && oldHardware.numberInStock ? oldHardware.numberInStock: "")
+            label(for="manufacturer") manufacturer: 
+            select#manufacturer.form-control(type='select' placeholder='Select manufacturer' name='manufacturer')
+                - manufacturers.sort(function(a, b) {let textA = a.name.toUpperCase(); let textB = b.name.toUpperCase(); return (textA < textB) ? -1 : (textA > textB) ? 1 : 0;});
+                for manufacturer in manufacturers
+                    option(value=manufacturer._id selected=(manufacturer._id.toString()===oldHardware.manufacturer ? 'selected' : false) ) #{manufacturer.name}
+            label(for="category") category: 
+            select#category.form-control(type='select' placeholder='Select category' name='category')
+                - categories.sort(function(a, b) {let textA = a.name.toUpperCase(); let textB = b.name.toUpperCase(); return (textA < textB) ? -1 : (textA > textB) ? 1 : 0;});
+                for category in categories
+                    option(value=category._id selected=(category._id.toString()===oldHardware.category ? 'selected' : false) ) #{category.name}
+            label(for="locations") locations: 
+            select#locations.form-control(type='select' placeholder='Select location' name='locations')
+                - locations.sort(function(a, b) {let textA = a.name.toUpperCase(); let textB = b.name.toUpperCase(); return (textA < textB) ? -1 : (textA > textB) ? 1 : 0;});
+                for location in locations
+                    option(value=location._id selected=(location._id.toString()===oldHardware.location ? 'selected' : false) ) #{location.name}
+            label(for="specifications") specifications: 
+                textarea(name='specifications' cols="30" rows="10"  placeholder="specifications" value=oldHardware && oldHardware.specifications ? oldHardware.specifications: "")
+            input(type='submit' value='save')

@@ -58,6 +58,21 @@ main {
   flex-wrap: wrap;
 }
 
+.hardwareForms form {
+  display: flex;
+  flex-direction: column;
+  gap: 1em;
+}
+
+/* .theform {
+  display: flex;
+} */
+
+.theform div {
+  display: flex;
+  flex-direction: column;
+}
+
 footer {
   border-top: 2px solid var(--fontColor);
 }

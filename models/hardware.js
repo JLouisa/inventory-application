@@ -2,15 +2,15 @@ const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
 const HardwareSchema = new Schema({
-  name: { type: String, required: true },
-  manufacturer: { type: Schema.Types.ObjectId, ref: "Manufacturer", required: true },
-  description: { type: String, required: true },
-  category: { type: Schema.Types.ObjectId, ref: "Category", required: true },
-  price: { type: Number, required: true },
+  name: { type: String, required: [true, "Name is required."] },
+  manufacturer: { type: Schema.Types.ObjectId, ref: "Manufacturer", required: [true, "Manufacturer is required."] },
+  description: { type: String, required: [true, "Description is required."] },
+  category: { type: Schema.Types.ObjectId, ref: "Category", required: [true, "Category is required."] },
+  price: { type: Number, required: [true, "Price is required."] },
   numberInStock: { type: Number },
-  sku: { type: String, required: true },
-  specifications: { type: Array, required: true },
-  locations: { type: Schema.Types.ObjectId, ref: "Location", required: true },
+  sku: { type: String, required: [true, "SKU is required."] },
+  specifications: { type: Array, required: [true, "Specifications is required."] },
+  locations: { type: Schema.Types.ObjectId, ref: "Location", required: [true, "Location is required."] },
 });
 
 // Virtual for book's URL
