@@ -63,7 +63,32 @@ exports.hardwareCreateGet = asyncHandler(async function (req, res, next) {
 // Handle Genre create on POST.
 exports.hardwareCreatePost = [
   // Validate and sanitize the name field.
-  body("name", "Genre name must contain at least 3 characters").trim().isLength({ min: 3 }).escape(),
+  // body("name", "Genre name must contain at least 3 characters").trim().isLength({ min: 3 }).escape(),
+  body("name").notEmpty().withMessage("Name must not be empty").trim().isLength({ min: 3, max: 20 }).escape(),
+  body("manufacturer")
+    .notEmpty()
+    .withMessage("manufacturer must not be empty")
+    .trim()
+    .isLength({ min: 3, max: 30 })
+    .escape(),
+  body("description")
+    .notEmpty()
+    .withMessage("description must not be empty")
+    .trim()
+    .isLength({ min: 3, max: 150 })
+    .escape(),
+  //     check("name").notEmpty().withMessage("Name must not be empty").trim().escape(),
+  //     check("manufacturer").withMessage("Manufacturer must not be empty").notEmpty().trim().escape(),
+  //     check("description").withMessage("Description must not be empty").notEmpty().trim().escape(),
+  //     check("category").withMessage("Category must not be empty").notEmpty().trim().escape(),
+  //     check("price").withMessage("Price must not be empty").notEmpty().trim().escape(),
+  //     check("specifications").withMessage("Specifications must not be empty").notEmpty().trim().escape(),
+  //     check("locations").withMessage("Locations must not be empty").notEmpty().trim().escape(),
+  //     check("numberInStock")
+  //       .optional()
+  //       .isInt({ min: 1 })
+  //       .withMessage("Number in stock must be a positive integer")
+  //       .toInt(),
 
   // Process request after validation and sanitization.
   asyncHandler(async (req, res, next) => {
