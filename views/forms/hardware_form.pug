@@ -5,10 +5,6 @@ block content
     p= text
     div(class='hardwareForms')
         form(Method="POST" action="" class="theform")
-            if errors
-                    ul
-                        each error in errors
-                            li= error.msg
             label(for="name") Name: 
             input(type='text' name="name" placeholder="Name" value=oldHardware && oldHardware.name ? oldHardware.name: "")
             label(for="description") description: 
@@ -35,3 +31,7 @@ block content
             label(for="specifications") specifications: 
                 textarea(name='specifications' cols="30" rows="10"  placeholder="specifications" value=oldHardware && oldHardware.specifications ? oldHardware.specifications: "")
             input(type='submit' value='save')
+        if errors
+            ul
+                each error in errors
+                    li= error.msg

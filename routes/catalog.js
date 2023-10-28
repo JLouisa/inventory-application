@@ -9,9 +9,9 @@ router.get("/", hardwareController.catalog);
 router.get("/hardware/:id", hardwareController.product);
 
 // GET product create form page
-router.get("/create", hardwareController.createGet);
+router.get("/create", hardwareController.hardwareCreateGet);
 
 // POST product create form page
-router.post("/create", hardwareController.createPost);
+router.post("/create", hardwareController.hardwareCreatePost);
 
 module.exports = router;
