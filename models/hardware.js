@@ -16,7 +16,7 @@ const HardwareSchema = new Schema({
 // Virtual for book's URL
 HardwareSchema.virtual("url").get(function () {
   // We don't use an arrow function as we'll need the this object
-  return `/catalog/hardware/${this._id}`;
+  return `catalog/hardware/${this._id}`;
 });
 
 // Virtual field to get warrantyInformation from the manufacturer
