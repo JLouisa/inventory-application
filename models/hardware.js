@@ -23,6 +23,9 @@ HardwareSchema.virtual("url").get(function () {
 HardwareSchema.virtual("warrantyInformation").get(function () {
   if (this.manufacturer) {
     // Assuming a Manufacturer model
+    this.manufacturer.warranties.forEach((element) => {
+      if (element === this.category) return;
+    });
     return this.manufacturer.warranties[this.category]; // Combine warranties from the manufacturer
   }
   return "No warranty information available";

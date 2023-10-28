@@ -1,0 +1,9 @@
+extends layout
+
+block content
+  h1= title
+  p= text
+  ul
+    each val in category
+        li
+            a(href=val.url) #{val.name}

@@ -21,6 +21,7 @@ exports.product = asyncHandler(async function (req, res, next) {
     text: hardware.description,
     category: hardware.category.name,
     specifications: hardware.specifications,
+    warranty: hardware.warrantyInformation,
     manufacturer: hardware.manufacturer.name,
     price: Number(hardware.price).toFixed(2),
     stock: hardware.numberInStock,
