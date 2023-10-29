@@ -14,7 +14,6 @@ block content
             input(type="text", name="name" placeholder='name' value= oldManufacturer && oldManufacturer.name ? oldManufacturer.name : "")
             label(for="joinedDate") Joined Date:
             input(type="date", name="joinedDate" placeholder=oldManufacturer && oldManufacturer.joinedDate ? "": 'yyyy/mm/dd' value=oldManufacturer && oldManufacturer.joinedDate ? oldManufacturer.joinedDate.toISOString().slice(0, 10) : "")
-
             label(for="address") Address
             input(type="text", name="address" placeholder='address' value= oldManufacturer && oldManufacturer.address ? oldManufacturer.address : "")
             label(for="category") Warranty Category: 

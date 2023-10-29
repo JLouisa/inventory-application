@@ -13,7 +13,17 @@ block content
             p= item2
     p Are you sure you want to delete
     div
-        a(href= url class="btn") No
         form(method='POST' action='')
             input#itemid.form-control(type='hidden',name='delete', required='true', value=item._id )
+            label(for="secretKey") SecretKey 
+            input#secretKeyInput.form-control(type='text', name='secretKey', required='true')
+            br
+            a(href= url class="btn") No
             button.btn.btn-primary(type='submit') Yes
+    //- div
+    //-     if !msg
+    //-         script.
+    //-             const secretKey = prompt("Please enter the secret key to be able to delete/update this document");
+    //-             document.getElementById("secretKeyInput").value = secretKey;
+    //-     else
+    //-         p= msg

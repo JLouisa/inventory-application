@@ -2,6 +2,7 @@ const asyncHandler = require("express-async-handler");
 const { body, validationResult } = require("express-validator");
 const Hardware = require("../models/hardware");
 const Category = require("../models/category");
+const dotenv = require("dotenv").config();
 
 //! GET all category page
 exports.category = asyncHandler(async function (req, res, next) {
@@ -174,17 +175,30 @@ exports.categoryDeleteGet = asyncHandler(async function (req, res, next) {
     text: `Are you sure you want to delete '${theCategory.name}'`,
     item: theCategory,
     item2: newCate,
-    url: "/" + theCategory.url,
+    url: `/category/${theCategory._id}`,
+    alertMessage: "TEsting",
   });
 });
 
 //! POST Category Delete page
 exports.categoryDeletePost = asyncHandler(async function (req, res, next) {
-  // Get details of author and all their books (in parallel)
+  console.log(req.body);
   const theCategory = await Category.findById(req.params.id).exec();
 
   // Redirect to Book List if there is no book to delete
   if (theCategory === null) res.redirect("/category");
+
+  // Check secret key
+  if (req.body.secretKey !== process.env.SECRECT_KEY) {
+    console.log("Secretkey matched");
+    res.render("delete/no_delete_auth", {
+      title: "This is the Category Delete GET page",
+      text: `You can't delete '${theCategory.name}'`,
+      url: "/category/delete/" + theCategory._id,
+      msg: "Sorry the key you provided is incorrect. You can't delete/ update this page. Please refresh your page and try again.",
+    });
+    return;
+  }
 
   // Delete object and redirect to the list of books.
   await Category.findByIdAndRemove(req.params.id);

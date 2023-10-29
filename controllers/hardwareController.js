@@ -307,6 +307,18 @@ exports.hardwareDeletePost = asyncHandler(async function (req, res, next) {
   // Redirect to Book List if there is no book to delete
   if (theHardware === null) res.redirect("/catalog/hardware");
 
+  // Check secret key
+  if (req.body.secretKey !== process.env.SECRECT_KEY) {
+    console.log("Secretkey matched");
+    res.render("delete/no_delete_auth", {
+      title: "This is the Category Delete GET page",
+      text: `You can't delete delete '${theHardware.name}'`,
+      url: "/" + theHardware.url,
+      msg: "Sorry the key you provided is incorrect. You can't delete/ update this page. Please refresh your page and try again.",
+    });
+    return;
+  }
+
   // Delete object and redirect to the list of books.
   await Hardware.findByIdAndRemove(req.params.id);
   res.redirect("/catalog");
