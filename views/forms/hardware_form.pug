@@ -13,7 +13,7 @@ block content
             label(for="name") Name: 
             input(type='text' name="name" placeholder="Name" value=oldHardware && oldHardware.name ? oldHardware.name: "" required='true')
             label(for="description") description: 
-            textarea(name="description" cols="30" rows="10" placeholder="description" value=oldHardware && oldHardware.description ? oldHardware.description: "" required)
+            textarea(name="description" cols="30" rows="10" placeholder=oldHardware && oldHardware.description ? oldHardware.description : "Enter a description...")= oldHardware && oldHardware.description ? oldHardware.description: ""
             label(for="price") price: 
             input(type='number' name="price" placeholder="1000" value=oldHardware && oldHardware.price ? oldHardware.price: "" required='true')
             label(for="numberInStock") Number in Stock: 
@@ -34,5 +34,5 @@ block content
                 for location in locations
                     option(value=location._id selected=(location._id.toString()===oldHardware.location ? 'selected' : false) ) #{location.name}
             label(for="specifications") specifications: 
-            textarea(name='specifications' cols="30" rows="10"  placeholder="specifications" value=oldHardware && oldHardware.specifications ? oldHardware.specifications: "" required)
+            textarea(name="specifications" cols="30" rows="10" placeholder=oldHardware && oldHardware.specifications ? oldHardware.specifications : "Enter a specifications...")= oldHardware && oldHardware.specifications ? oldHardware.specifications: ""
             input(type='submit' value='save')

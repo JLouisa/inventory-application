@@ -10,7 +10,7 @@ const HardwareSchema = new Schema({
   numberInStock: { type: Number },
   sku: { type: String, required: [true, "SKU is required."] },
   specifications: { type: Array, required: [true, "Specifications is required."] },
-  locations: { type: Schema.Types.ObjectId, ref: "Location", required: [true, "Location is required."] },
+  locations: { type: Schema.Types.ObjectId, ref: "Locations", required: [true, "Location is required."] },
 });
 
 // Virtual for book's URL

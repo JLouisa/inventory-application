@@ -103,6 +103,7 @@ exports.categoryUpdateGet = asyncHandler(async function (req, res, next) {
 
   res.render("forms/category_form", {
     title: "This is the Category Update page",
+    url: "/category",
     oldCategory: theCategory,
   });
 });
@@ -158,10 +159,21 @@ exports.categoryUpdatePost = [
 exports.categoryDeleteGet = asyncHandler(async function (req, res, next) {
   const theCategory = await Category.findById(req.params.id);
 
+  function capitalizeFirstLetter(word) {
+    return word.charAt(0).toUpperCase() + word.slice(1);
+  }
+
+  const newCate = {
+    Name: capitalizeFirstLetter(theCategory.name),
+    Description: capitalizeFirstLetter(theCategory.description),
+  };
+
   res.render("delete/delete_page", {
     title: "This is the Category Delete GET page",
     text: `Are you sure you want to delete '${theCategory.name}'`,
     item: theCategory,
+    item2: newCate,
+    url: "/" + theCategory.url,
   });
 });
 

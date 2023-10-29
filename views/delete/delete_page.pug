@@ -3,11 +3,14 @@ extends ../layout
 block content
     h1= title
     h2= text
-    p= item.name
-    p= item.description
+    div
+        each value, key in item2
+            - if (key !== "_id")
+                p
+                    | #{key}: #{value}
     p Are you sure you want to delete
     div
-        a(href="/category" class="btn") No
+        a(href= url class="btn") No
         form(method='POST' action='')
             input#itemid.form-control(type='hidden',name='delete', required='true', value=item._id )
             button.btn.btn-primary(type='submit') Yes

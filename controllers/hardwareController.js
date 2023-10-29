@@ -156,18 +156,165 @@ exports.hardwareCreatePost = [
   }),
 ];
 
+//! GET Hardware Update page
 exports.hardwareUpdateGet = asyncHandler(async function (req, res, next) {
-  res.render("dev", { title: "This is the Hardware Update GET page" });
+  const [theHardware, allManufacturer, allCategories, allLocations] = await Promise.all([
+    Hardware.findById(req.params.id).populate("manufacturer").populate("category").exec(),
+    Manufacturer.find().exec(),
+    Category.find().exec(),
+    Locations.find().exec(),
+  ]);
+
+  if (theHardware === null) {
+    // No results.
+    const err = new Error("Hardware not found");
+    err.status = 404;
+    return next(err);
+  }
+
+  res.render("forms/hardware_form", {
+    title: "Hardware Update Form",
+    text: "Welcome to our Hardware Update Forms",
+    oldHardware: theHardware,
+    manufacturers: allManufacturer,
+    categories: allCategories,
+    locations: allLocations,
+  });
 });
 
-exports.hardwareUpdatePost = asyncHandler(async function (req, res, next) {
-  res.render("dev", { title: "This is the Hardware Update POST page" });
-});
+exports.hardwareUpdatePost = [
+  // Validate and sanitize the name field.
+  body("name")
+    .notEmpty()
+    .withMessage("Name must not be empty")
+    .trim()
+    .isLength({ min: 3, max: 20 })
+    .withMessage("Name must be between 3 and 20 characters")
+    .escape(),
+  body("manufacturer").notEmpty().withMessage("Manufacturer must not be empty").trim().escape(),
+  body("description")
+    .notEmpty()
+    .withMessage("Description must not be empty")
+    .trim()
+    .isLength({ min: 3, max: 150 })
+    .withMessage("Description must be between 3 and 20 characters")
+    .escape(),
+  body("category").notEmpty().withMessage("Category must not be empty").trim().escape(),
+  body("price")
+    .notEmpty()
+    .withMessage("Price must not be empty")
+    .trim()
+    .isLength({ min: 1, max: 10 })
+    .withMessage("Price must be between 1 and 10 characters")
+    .escape(),
+  body("specifications")
+    .notEmpty()
+    .withMessage("Specifications must not be empty")
+    .trim()
+    .withMessage("Specifications must be between 3 and 20 characters")
+    .isLength({ min: 3, max: 150 })
+    .withMessage("Specifications must be between 3 and 150 characters")
+    .escape(),
+  body("locations").notEmpty().withMessage("Locations must not be empty").trim().escape(),
+  body("numberInStock")
+    .notEmpty()
+    .withMessage("Number In Stock must not be empty")
+    .trim()
+    .isLength({ min: 1, max: 10 })
+    .withMessage("Number In Stock must be between 1 and 10 characters")
+    .escape(),
+
+  // Process request after validation and sanitization.
+  asyncHandler(async (req, res, next) => {
+    const [allManufacturer, allCategories, allLocations] = await Promise.all([
+      Manufacturer.find().exec(),
+      Category.find().exec(),
+      Locations.find().exec(),
+    ]);
+    // Extract the validation errors from a request.
+    const errors = validationResult(req);
+
+    const newHardware = new Hardware({
+      _id: req.params.id ? req.params.id : undefined,
+      name: req.body.name || "",
+      manufacturer: req.body.manufacturer || "",
+      description: req.body.description || "",
+      category: req.body.category || "",
+      price: req.body.price || 0,
+      numberInStock: req.body.numberInStock || 0,
+      sku: req.body.sku || uuidv4(),
+      specifications: req.body.specifications || "",
+      locations: req.body.locations || "",
+    });
+
+    if (!errors.isEmpty()) {
+      // There are errors. Render the form again with sanitized values/error messages.
+      res.render("forms/category_form", {
+        title: "Location Update Failed",
+        text: "Please review and correct the following issues before submitting the form:",
+        oldHardware: newHardware,
+        manufacturers: allManufacturer,
+        categories: allCategories,
+        locations: allLocations,
+        errors: errors.array(),
+      });
+      return;
+    } else {
+      // Data from form is valid. Update the record.
+      const updatedHardware = await Hardware.findByIdAndUpdate(req.params.id, newHardware, {});
+
+      // Redirect to book detail page.
+      return res.redirect(`/${updatedHardware.url}`);
+    }
+  }),
+];
 
 exports.hardwareDeleteGet = asyncHandler(async function (req, res, next) {
-  res.render("dev", { title: "This is the Hardware Delete GET page" });
+  const theHardware = await Hardware.findById(req.params.id)
+    .populate("manufacturer")
+    .populate("category")
+    .populate("locations");
+  // .populate("locations");
+
+  // const [allManufacturer, allCategory, allLocations] = await Promise.all([
+  //   Manufacturer.find().exec(),
+  //   Category.find().exec(),
+  //   Locations.find().exec(),
+  // ]);
+
+  function capitalizeFirstLetter(word) {
+    if (typeof word !== "number") return word.charAt(0).toUpperCase() + word.slice(1);
+  }
+
+  const newHardware = {
+    Name: capitalizeFirstLetter(theHardware.name),
+    Manufacturer: capitalizeFirstLetter(theHardware.manufacturer.name),
+    Description: capitalizeFirstLetter(theHardware.description),
+    Category: capitalizeFirstLetter(theHardware.category.name),
+    Price: theHardware.price,
+    NumberInStock: theHardware.numberInStock,
+    SKU: capitalizeFirstLetter(theHardware.sku),
+    Specifications: theHardware.specifications,
+    Locations: capitalizeFirstLetter(theHardware.locations.name),
+  };
+
+  res.render("delete/delete_page", {
+    title: "This is the Category Delete GET page",
+    text: `Are you sure you want to delete '${theHardware.name}'`,
+    item: theHardware,
+    item2: newHardware,
+    url: "/" + theHardware.url,
+  });
 });
 
 exports.hardwareDeletePost = asyncHandler(async function (req, res, next) {
-  res.render("dev", { title: "This is the Hardware Delete POST page" });
+  // Get details of author and all their books (in parallel)
+  const theHardware = await Hardware.findById(req.params.id).exec();
+
+  // Redirect to Book List if there is no book to delete
+  if (theHardware === null) res.redirect("/catalog/hardware");
+
+  // Delete object and redirect to the list of books.
+  await Hardware.findByIdAndRemove(req.params.id);
+  res.redirect("/catalog");
 });
