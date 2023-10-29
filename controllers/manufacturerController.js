@@ -156,15 +156,17 @@ exports.manufacturerUpdateGet = asyncHandler(async function (req, res, next) {
     if (typeof obj === "object") {
       for (let key in obj) {
         if (obj.hasOwnProperty(key)) {
-          arr.push(`${key}: ${obj[key]}`);
+          arr.push(`${obj[key]}`);
         }
       }
-      return arr.join(" ");
+      return arr.join("");
     }
     return obj;
   }
 
   const newWarranties = putInArr(theManufacturer.warranties);
+  console.log("newWarranties");
+  console.log(newWarranties);
 
   const new2Manufacturer = {
     name: theManufacturer.name || "",
@@ -208,7 +210,11 @@ exports.manufacturerUpdatePost = [
 
   // Process request after validation and sanitization.
   asyncHandler(async (req, res, next) => {
-    const allCategories = await Category.find().exec();
+    console.log(req.body);
+    const [allCategories, theCategory] = await Promise.all([
+      Category.find().exec(),
+      Category.findById(req.body.category).exec(),
+    ]);
 
     // Extract the validation errors from a request.
     const errors = validationResult(req);
@@ -218,7 +224,10 @@ exports.manufacturerUpdatePost = [
       name: req.body.name || "",
       joinedDate: req.body.joinedDate || "",
       address: req.body.address || "",
-      warranties: req.body.warranties || "",
+      warranties:
+        {
+          [theCategory.name]: req.body.warranties,
+        } || "",
     });
 
     if (!errors.isEmpty()) {
