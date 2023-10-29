@@ -156,6 +156,7 @@ exports.categoryUpdatePost = [
   }),
 ];
 
+//! GET Category Delete page
 exports.categoryDeleteGet = asyncHandler(async function (req, res, next) {
   const theCategory = await Category.findById(req.params.id);
 
@@ -177,6 +178,7 @@ exports.categoryDeleteGet = asyncHandler(async function (req, res, next) {
   });
 });
 
+//! POST Category Delete page
 exports.categoryDeletePost = asyncHandler(async function (req, res, next) {
   // Get details of author and all their books (in parallel)
   const theCategory = await Category.findById(req.params.id).exec();

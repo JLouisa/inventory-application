@@ -274,13 +274,6 @@ exports.hardwareDeleteGet = asyncHandler(async function (req, res, next) {
     .populate("manufacturer")
     .populate("category")
     .populate("locations");
-  // .populate("locations");
-
-  // const [allManufacturer, allCategory, allLocations] = await Promise.all([
-  //   Manufacturer.find().exec(),
-  //   Category.find().exec(),
-  //   Locations.find().exec(),
-  // ]);
 
   function capitalizeFirstLetter(word) {
     if (typeof word !== "number") return word.charAt(0).toUpperCase() + word.slice(1);
