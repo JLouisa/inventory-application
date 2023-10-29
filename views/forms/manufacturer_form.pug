@@ -22,5 +22,5 @@ block content
                     for category in categories
                         option(value=category._id selected=(category._id.toString()===oldManufacturer.category ? 'selected' : false) ) #{category.name}
             label(for="warranties") Warranty
-            textarea(name="warranties" cols="30" rows="10" placeholder="warranty" value=oldManufacturer && oldManufacturer.description ? oldManufacturer.description: "")
+            textarea(name="warranties" cols="30" rows="10"  placeholder=oldManufacturer && oldManufacturer.warranties ? oldManufacturer.warranties : "Enter a warranties...")= oldManufacturer && oldManufacturer.warranties ? oldManufacturer.warranties: ""
             input(type='submit' value='save')

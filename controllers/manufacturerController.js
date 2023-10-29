@@ -132,23 +132,147 @@ exports.manufacturerCreatePost = [
 
       await newManufacturer.save();
 
-      return res.redirect("../manufacturers");
+      return res.redirect("../manufacturer");
     }
   }),
 ];
 
+//! GET Manufacturer Update page
 exports.manufacturerUpdateGet = asyncHandler(async function (req, res, next) {
-  res.render("dev", { title: "This is the Manufacturer Update GET page" });
+  const [theManufacturer, allCategories] = await Promise.all([
+    Manufacturer.findById(req.params.id),
+    Category.find().exec(),
+  ]);
+
+  if (theManufacturer === null) {
+    // No results.
+    const err = new Error("Manufacturer not found");
+    err.status = 404;
+    return next(err);
+  }
+
+  function putInArr(obj) {
+    const arr = [];
+    if (typeof obj === "object") {
+      for (let key in obj) {
+        if (obj.hasOwnProperty(key)) {
+          arr.push(`${key}: ${obj[key]}`);
+        }
+      }
+      return arr.join(" ");
+    }
+    return obj;
+  }
+
+  const newWarranties = putInArr(theManufacturer.warranties);
+
+  const new2Manufacturer = {
+    name: theManufacturer.name || "",
+    joinedDate: theManufacturer.joinedDate || "",
+    address: theManufacturer.address || "",
+    warranties: newWarranties,
+  };
+
+  res.render("forms/manufacturer_form", {
+    title: "This is the Manufacturer Update page",
+    oldManufacturer: new2Manufacturer,
+    categories: allCategories,
+  });
 });
 
-exports.manufacturerUpdatePost = asyncHandler(async function (req, res, next) {
-  res.render("dev", { title: "This is the Manufacturer Update POST page" });
-});
+//! POST Manufacturer Update page
+exports.manufacturerUpdatePost = [
+  // Validate and sanitize the name field.
+  body("name")
+    .notEmpty()
+    .withMessage("Name must not be empty")
+    .trim()
+    .isLength({ min: 3, max: 20 })
+    .withMessage("Name must be between 3 and 20 characters")
+    .escape(),
+  body("joinedDate").notEmpty().withMessage("Joined Date must not be empty").isDate().trim().escape(),
+  body("address")
+    .notEmpty()
+    .withMessage("Address must not be empty")
+    .trim()
+    .isLength({ min: 1, max: 40 })
+    .withMessage("Address must be between 1 and 40 characters")
+    .escape(),
+  body("warranties")
+    .notEmpty()
+    .withMessage("Warranty must not be empty")
+    .trim()
+    .isLength({ min: 1, max: 150 })
+    .withMessage("Warranty must be between 1 and 150 characters")
+    .escape(),
 
+  // Process request after validation and sanitization.
+  asyncHandler(async (req, res, next) => {
+    const allCategories = await Category.find().exec();
+
+    // Extract the validation errors from a request.
+    const errors = validationResult(req);
+
+    const newManufacturer = new Manufacturer({
+      _id: req.params.id ? req.params.id : undefined,
+      name: req.body.name || "",
+      joinedDate: req.body.joinedDate || "",
+      address: req.body.address || "",
+      warranties: req.body.warranties || "",
+    });
+
+    if (!errors.isEmpty()) {
+      // There are errors. Render the form again with sanitized values/error messages.
+      res.render("forms/manufacturer_form", {
+        title: "Manufacturer Update Failed",
+        text: "Please review and correct the following issues before submitting the form:",
+        oldManufacturer: newManufacturer,
+        categories: allCategories,
+        errors: errors.array(),
+      });
+      return;
+    } else {
+      // Data from form is valid. Update the record.
+      const updatedManufacturer = await Manufacturer.findByIdAndUpdate(req.params.id, newManufacturer, {});
+
+      // Redirect to book detail page.
+      return res.redirect(updatedManufacturer.url);
+    }
+  }),
+];
+
+//! GET Manufacturer Delete page
 exports.manufacturerDeleteGet = asyncHandler(async function (req, res, next) {
-  res.render("dev", { title: "This is the Manufacturer Delete GET page" });
+  const theManufacturer = await Manufacturer.findById(req.params.id).exec();
+
+  function capitalizeFirstLetter(word) {
+    if (typeof word !== "number") return word.charAt(0).toUpperCase() + word.slice(1);
+  }
+
+  const newManufacturer = {
+    Name: capitalizeFirstLetter(theManufacturer.name),
+    joinedDate: theManufacturer.joinedDate,
+    Address: theManufacturer.address,
+  };
+
+  res.render("delete/delete_page", {
+    title: "This is the Category Delete GET page",
+    text: `Are you sure you want to delete '${theManufacturer.name}'`,
+    item: theManufacturer,
+    item2: newManufacturer,
+    url: theManufacturer.url,
+  });
 });
 
+//! POST Manufacturer Delete page
 exports.manufacturerDeletePost = asyncHandler(async function (req, res, next) {
-  res.render("dev", { title: "This is the Manufacturer Delete POST page" });
+  // Get details of author and all their books (in parallel)
+  const theManufacturer = await Manufacturer.findById(req.params.id).exec();
+
+  // Redirect to Book List if there is no book to delete
+  if (theManufacturer === null) res.redirect("/manufacturer");
+
+  // Delete object and redirect to the list of books.
+  await Manufacturer.findByIdAndRemove(req.params.id);
+  res.redirect("/manufacturer");
 });

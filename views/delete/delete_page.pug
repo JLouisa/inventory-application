@@ -4,10 +4,13 @@ block content
     h1= title
     h2= text
     div
-        each value, key in item2
-            - if (key !== "_id")
-                p
-                    | #{key}: #{value}
+        - if (typeof item2 === 'object')
+            each value, key in item2
+                - if (key !== "_id")
+                    p
+                        | #{key}: #{value}
+        - else
+            p= item2
     p Are you sure you want to delete
     div
         a(href= url class="btn") No
