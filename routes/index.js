@@ -1,6 +1,5 @@
 const express = require("express");
 const router = express.Router();
-const categoryController = require("../controllers/categoryController");
 
 /* GET home page. */
 router.get("/", function (req, res, next) {
@@ -8,11 +7,5 @@ router.get("/", function (req, res, next) {
     title: "Welcome to the Computer Parts Shop.",
   });
 });
-
-/* GET category page. */
-router.get("/category", categoryController.category);
-
-/* GET category details page. */
-router.get("/category/:id", categoryController.categoryDetails);
 
 module.exports = router;

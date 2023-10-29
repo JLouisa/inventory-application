@@ -11,6 +11,7 @@ const dotenv = require("dotenv").config();
 const indexRouter = require("./routes/index");
 const usersRouter = require("./routes/users");
 const catalogRouter = require("./routes/catalog");
+const categoryRouter = require("./routes/category");
 const locationsRouter = require("./routes/locations");
 const manufacturersRouter = require("./routes/manufacturer");
 
@@ -46,6 +47,7 @@ app.use(express.static(path.join(__dirname, "public")));
 app.use("/", indexRouter);
 app.use("/users", usersRouter);
 app.use("/catalog", catalogRouter); // Add catalog routes to middleware chain.
+app.use("/category", categoryRouter); // Add category routes to middleware chain.
 app.use("/locations", locationsRouter); // Add locations routes to middleware chain.
 app.use("/manufacturer", manufacturersRouter); // Add manufacturers routes to middleware chain.
 

@@ -1,0 +1,26 @@
+extends ../layout
+
+block content
+    h1= title
+    p= text
+    div(class='error')
+        if errors
+            ul
+                each error in errors
+                    li= error.msg
+    div(class='hardwareForms')
+        form(Method="POST" action="" class="theform")
+            label(for="name") Manufacturer name:
+            input(type="text", name="name" placeholder='name' value= oldManufacturer && oldManufacturer.name ? oldManufacturer.name : "")
+            label(for="joinedDate") Joined Date:
+            input(type="date", name="joinedDate" placeholder='yyyy/mm/dd' value= oldManufacturer && oldManufacturer.joinedDate ? oldManufacturer.joinedDate : "")
+            label(for="address") Address
+            input(type="text", name="address" placeholder='address' value= oldManufacturer && oldManufacturer.address ? oldManufacturer.address : "")
+            label(for="category") Warranty Category: 
+            select#category.form-control(type='select' placeholder='Select category' name='category')
+                - categories.sort(function(a, b) {let textA = a.name.toUpperCase(); let textB = b.name.toUpperCase(); return (textA < textB) ? -1 : (textA > textB) ? 1 : 0;});
+                    for category in categories
+                        option(value=category._id selected=(category._id.toString()===oldManufacturer.category ? 'selected' : false) ) #{category.name}
+            label(for="warranties") Warranty
+            textarea(name="warranties" cols="30" rows="10" placeholder="warranty" value=oldManufacturer && oldManufacturer.description ? oldManufacturer.description: "")
+            input(type='submit' value='save')

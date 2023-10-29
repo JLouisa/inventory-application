@@ -3,16 +3,21 @@ extends ../layout
 block content
     h1= title
     p= text
+    div(class='error')
+        if errors
+            ul
+                each error in errors
+                    li= error.msg
     div(class='hardwareForms')
         form(Method="POST" action="" class="theform")
             label(for="name") Name: 
-            input(type='text' name="name" placeholder="Name" value=oldHardware && oldHardware.name ? oldHardware.name: "")
+            input(type='text' name="name" placeholder="Name" value=oldHardware && oldHardware.name ? oldHardware.name: "" required='true')
             label(for="description") description: 
-            textarea(name="description" cols="30" rows="10" placeholder="description" value=oldHardware && oldHardware.description ? oldHardware.description: "")
+            textarea(name="description" cols="30" rows="10" placeholder="description" value=oldHardware && oldHardware.description ? oldHardware.description: "" required)
             label(for="price") price: 
-            input(type='number' name="price" placeholder="1000" value=oldHardware && oldHardware.price ? oldHardware.price: "")
+            input(type='number' name="price" placeholder="1000" value=oldHardware && oldHardware.price ? oldHardware.price: "" required='true')
             label(for="numberInStock") Number in Stock: 
-            input(type='number' name="numberInStock" placeholder="50" value=oldHardware && oldHardware.numberInStock ? oldHardware.numberInStock: "")
+            input(type='number' name="numberInStock" placeholder="50" value=oldHardware && oldHardware.numberInStock ? oldHardware.numberInStock: "" required='true')
             label(for="manufacturer") manufacturer: 
             select#manufacturer.form-control(type='select' placeholder='Select manufacturer' name='manufacturer')
                 - manufacturers.sort(function(a, b) {let textA = a.name.toUpperCase(); let textB = b.name.toUpperCase(); return (textA < textB) ? -1 : (textA > textB) ? 1 : 0;});
@@ -29,9 +34,5 @@ block content
                 for location in locations
                     option(value=location._id selected=(location._id.toString()===oldHardware.location ? 'selected' : false) ) #{location.name}
             label(for="specifications") specifications: 
-                textarea(name='specifications' cols="30" rows="10"  placeholder="specifications" value=oldHardware && oldHardware.specifications ? oldHardware.specifications: "")
+            textarea(name='specifications' cols="30" rows="10"  placeholder="specifications" value=oldHardware && oldHardware.specifications ? oldHardware.specifications: "" required)
             input(type='submit' value='save')
-        if errors
-            ul
-                each error in errors
-                    li= error.msg

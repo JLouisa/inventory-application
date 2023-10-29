@@ -16,6 +16,7 @@ exports.catalog = asyncHandler(async function (req, res, next) {
   });
 });
 
+//! GET Request for products product details
 exports.product = asyncHandler(async function (req, res, next) {
   const hardware = await Hardware.findById(req.params.id).populate("manufacturer").populate("category").exec();
   res.render("hardware_details", {
@@ -49,6 +50,7 @@ exports.hardwareCreateGet = asyncHandler(async function (req, res, next) {
     specifications: req.body.specifications || "",
     locations: req.body.locations || "",
   });
+
   res.render("forms/hardware_form", {
     title: "Hardware Form",
     text: "Welcome to our hardware forms",
@@ -63,35 +65,50 @@ exports.hardwareCreateGet = asyncHandler(async function (req, res, next) {
 // Handle Genre create on POST.
 exports.hardwareCreatePost = [
   // Validate and sanitize the name field.
-  // body("name", "Genre name must contain at least 3 characters").trim().isLength({ min: 3 }).escape(),
-  body("name").notEmpty().withMessage("Name must not be empty").trim().isLength({ min: 3, max: 20 }).escape(),
-  body("manufacturer")
+  body("name")
     .notEmpty()
-    .withMessage("manufacturer must not be empty")
+    .withMessage("Name must not be empty")
     .trim()
-    .isLength({ min: 3, max: 30 })
+    .isLength({ min: 3, max: 20 })
+    .withMessage("Name must be between 3 and 20 characters")
     .escape(),
+  body("manufacturer").notEmpty().withMessage("Manufacturer must not be empty").trim().escape(),
   body("description")
     .notEmpty()
-    .withMessage("description must not be empty")
+    .withMessage("Description must not be empty")
     .trim()
     .isLength({ min: 3, max: 150 })
+    .withMessage("Description must be between 3 and 20 characters")
     .escape(),
-  //     check("name").notEmpty().withMessage("Name must not be empty").trim().escape(),
-  //     check("manufacturer").withMessage("Manufacturer must not be empty").notEmpty().trim().escape(),
-  //     check("description").withMessage("Description must not be empty").notEmpty().trim().escape(),
-  //     check("category").withMessage("Category must not be empty").notEmpty().trim().escape(),
-  //     check("price").withMessage("Price must not be empty").notEmpty().trim().escape(),
-  //     check("specifications").withMessage("Specifications must not be empty").notEmpty().trim().escape(),
-  //     check("locations").withMessage("Locations must not be empty").notEmpty().trim().escape(),
-  //     check("numberInStock")
-  //       .optional()
-  //       .isInt({ min: 1 })
-  //       .withMessage("Number in stock must be a positive integer")
-  //       .toInt(),
+  body("category").notEmpty().withMessage("Category must not be empty").trim().escape(),
+  body("price")
+    .notEmpty()
+    .withMessage("Price must not be empty")
+    .trim()
+    .isLength({ min: 1, max: 10 })
+    .withMessage("Price must be between 1 and 10 characters")
+    .escape(),
+  body("specifications")
+    .notEmpty()
+    .withMessage("Specifications must not be empty")
+    .trim()
+    .withMessage("Specifications must be between 3 and 20 characters")
+    .isLength({ min: 3, max: 150 })
+    .withMessage("Specifications must be between 3 and 150 characters")
+    .escape(),
+  body("locations").notEmpty().withMessage("Locations must not be empty").trim().escape(),
+  body("numberInStock")
+    .notEmpty()
+    .withMessage("Number In Stock must not be empty")
+    .trim()
+    .isLength({ min: 1, max: 10 })
+    .withMessage("Number In Stock must be between 1 and 10 characters")
+    .escape(),
 
   // Process request after validation and sanitization.
   asyncHandler(async (req, res, next) => {
+    console.log(req.body);
+
     // Extract the validation errors from a request.
     const errors = validationResult(req);
 
@@ -118,8 +135,8 @@ exports.hardwareCreatePost = [
       ]);
 
       res.render("forms/hardware_form", {
-        title: "Hardware Form Failed",
-        text: "Welcome to our hardware forms Failed",
+        title: "Hardware Form Submission Failed",
+        text: "Please review and correct the following issues before submitting the form:",
         manufacturers: allManufacturer,
         categories: allCategory,
         locations: allLocations,
@@ -131,7 +148,7 @@ exports.hardwareCreatePost = [
       console.log("Validation succesfull");
       console.log("Save new document");
 
-      // await newHardware.save();
+      await newHardware.save();
 
       return res.redirect("/catalog");
     }

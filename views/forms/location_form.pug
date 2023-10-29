@@ -1,0 +1,19 @@
+extends ../layout
+
+block content
+    h1= title
+    p= text
+    div(class='error')
+        if errors
+            ul
+                each error in errors
+                    li= error.msg
+    div(class='hardwareForms')
+        form(Method="POST" action="" class="theform")
+            label(for="name") Location name:
+            input(type="text", name="name" placeholder='name' value= oldLocation && oldLocation.name ? oldLocation.name : "")
+            label(for="address") Address
+            input(type="text", name="address" placeholder='address' value= oldLocation && oldLocation.address ? oldLocation.address : "")
+            label(for="capacity") The Location Capacity:
+            input(type="number", name="capacity" placeholder='9000' value= oldLocation && oldLocation.capacity ? oldLocation.capacity : "")
+            input(type='submit' value='save')

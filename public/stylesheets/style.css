@@ -64,9 +64,9 @@ main {
   gap: 1em;
 }
 
-/* .theform {
-  display: flex;
-} */
+.error {
+  color: crimson;
+}
 
 .theform div {
   display: flex;
