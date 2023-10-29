@@ -82,3 +82,23 @@ footer p {
   text-align: center;
   padding: 1em;
 }
+
+.btn {
+  display: inline-block;
+  padding: 10px 20px;
+  background-color: #007bff; /* Button background color */
+  color: #fff; /* Button text color */
+  border: none; /* Remove button border */
+  border-radius: 5px; /* Add rounded corners */
+  cursor: pointer; /* Show a pointer cursor on hover */
+  text-decoration: none; /* Remove underlines for anchor elements */
+  text-align: center;
+  font-size: 16px;
+  font-weight: bold;
+  margin: 0.2em;
+}
+
+/* Hover effect */
+.btn:hover {
+  background-color: #0056b3; /* Darker color on hover */
+}

@@ -104,17 +104,17 @@ exports.categoryCreatePost = [
 ];
 
 exports.categoryUpdateGet = asyncHandler(async function (req, res, next) {
-  res.render("forms/category", { title: "This is the Manufacturer Update GET page" });
+  res.render("dev", { title: "This is the Category Update GET page" });
 });
 
 exports.categoryUpdatePost = asyncHandler(async function (req, res, next) {
-  res.render("forms/category", { title: "This is the Manufacturer Update POST page" });
+  res.render("dev", { title: "This is the Category Update POST page" });
 });
 
 exports.categoryDeleteGet = asyncHandler(async function (req, res, next) {
-  res.render("forms/category", { title: "This is the Manufacturer Delete GET page" });
+  res.render("dev", { title: "This is the Category Delete GET page" });
 });
 
 exports.categoryDeletePost = asyncHandler(async function (req, res, next) {
-  res.render("forms/category", { title: "This is the Manufacturer Delete POST page" });
+  res.render("dev", { title: "This is the Category Delete POST page" });
 });

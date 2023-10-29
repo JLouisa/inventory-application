@@ -138,17 +138,17 @@ exports.manufacturerCreatePost = [
 ];
 
 exports.manufacturerUpdateGet = asyncHandler(async function (req, res, next) {
-  res.render("forms/manufacturer", { title: "This is the Manufacturer Update GET page" });
+  res.render("dev", { title: "This is the Manufacturer Update GET page" });
 });
 
 exports.manufacturerUpdatePost = asyncHandler(async function (req, res, next) {
-  res.render("forms/manufacturer", { title: "This is the Manufacturer Update POST page" });
+  res.render("dev", { title: "This is the Manufacturer Update POST page" });
 });
 
 exports.manufacturerDeleteGet = asyncHandler(async function (req, res, next) {
-  res.render("forms/manufacturer", { title: "This is the Manufacturer Delete GET page" });
+  res.render("dev", { title: "This is the Manufacturer Delete GET page" });
 });
 
 exports.manufacturerDeletePost = asyncHandler(async function (req, res, next) {
-  res.render("forms/manufacturer", { title: "This is the Manufacturer Delete POST page" });
+  res.render("dev", { title: "This is the Manufacturer Delete POST page" });
 });

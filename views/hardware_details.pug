@@ -15,3 +15,6 @@ block content
     p Quantity available: #{stock}
     p Manufacturer: 
         a(href="/manufacturer/"+manufacturer._id) #{manufacturer.name}
+    div
+        a(href="/catalog/hardware/update/"+theID class="btn") Update
+        a(href="/catalog/hardware/delete/"+theID class="btn") Delete

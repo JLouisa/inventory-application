@@ -4,3 +4,6 @@ block content
   h1= location.name
   p Address: #{location.address}
   p Capacity: #{location.capacity}
+  div
+    a(href="/locations/update/"+location._id class="btn") Update
+    a(href="/locations/delete/"+location._id class="btn") Delete

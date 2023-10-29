@@ -13,7 +13,7 @@ exports.locations = asyncHandler(async function (req, res, next) {
 });
 
 //! GET Request for location details
-exports.locationDetail = asyncHandler(async function (req, res, next) {
+exports.locationsDetail = asyncHandler(async function (req, res, next) {
   const location = await Location.findById(req.params.id).exec();
   res.render("locations_details", {
     location: location,
@@ -94,3 +94,19 @@ exports.locationsCreatePost = [
     }
   }),
 ];
+
+exports.locationsUpdateGet = asyncHandler(async function (req, res, next) {
+  res.render("dev", { title: "This is the Locations Update GET page" });
+});
+
+exports.locationsUpdatePost = asyncHandler(async function (req, res, next) {
+  res.render("dev", { title: "This is the Locations Update POST page" });
+});
+
+exports.locationsDeleteGet = asyncHandler(async function (req, res, next) {
+  res.render("dev", { title: "This is the Locations Delete GET page" });
+});
+
+exports.locationsDeletePost = asyncHandler(async function (req, res, next) {
+  res.render("dev", { title: "This is the Locations Delete POST page" });
+});

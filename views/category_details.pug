@@ -8,3 +8,6 @@ block content
       each val in products
         li
           a(href="/catalog/hardware/"+val._id) #{val.name}
+  div
+    a(href="/category/update/"+category._id class="btn") Update
+    a(href="/category/delete/"+category._id class="btn") Delete

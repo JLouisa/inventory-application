@@ -28,6 +28,7 @@ exports.product = asyncHandler(async function (req, res, next) {
     manufacturer: hardware.manufacturer,
     price: Number(hardware.price).toFixed(2),
     stock: hardware.numberInStock,
+    theID: hardware._id,
   });
 });
 
@@ -154,3 +155,19 @@ exports.hardwareCreatePost = [
     }
   }),
 ];
+
+exports.hardwareUpdateGet = asyncHandler(async function (req, res, next) {
+  res.render("dev", { title: "This is the Hardware Update GET page" });
+});
+
+exports.hardwareUpdatePost = asyncHandler(async function (req, res, next) {
+  res.render("dev", { title: "This is the Hardware Update POST page" });
+});
+
+exports.hardwareDeleteGet = asyncHandler(async function (req, res, next) {
+  res.render("dev", { title: "This is the Hardware Delete GET page" });
+});
+
+exports.hardwareDeletePost = asyncHandler(async function (req, res, next) {
+  res.render("dev", { title: "This is the Hardware Delete POST page" });
+});
