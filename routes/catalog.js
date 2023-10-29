@@ -5,25 +5,25 @@ const hardwareController = require("../controllers/hardwareController");
 // GET catalog page
 router.get("/", hardwareController.catalog);
 
-// GET product page
-router.get("/hardware/:id", hardwareController.product);
-
 // GET product create form page
-router.get("/create", hardwareController.hardwareCreateGet);
+router.get("/hardware/create", hardwareController.hardwareCreateGet);
 
 /* GET category update page. */
-router.get("/update/:id", hardwareController.hardwareUpdateGet);
+router.get("/hardware/update/:id", hardwareController.hardwareUpdateGet);
 
 /* POST category update page. */
-router.post("/update/:id", hardwareController.hardwareUpdatePost);
+router.post("/hardware/update/:id", hardwareController.hardwareUpdatePost);
 
 /* GET category delete page. */
-router.get("/delete/:id", hardwareController.hardwareDeleteGet);
+router.get("/hardware/delete/:id", hardwareController.hardwareDeleteGet);
 
 /* POST category delete page. */
-router.post("/delete/:id", hardwareController.hardwareDeletePost);
+router.post("/hardware/delete/:id", hardwareController.hardwareDeletePost);
 
 // POST product create form page
-router.post("/create", hardwareController.hardwareCreatePost);
+router.post("/hardware/create", hardwareController.hardwareCreatePost);
+
+// GET product page
+router.get("/hardware/:id", hardwareController.product);
 
 module.exports = router;

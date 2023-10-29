@@ -64,9 +64,6 @@ exports.categoryCreatePost = [
 
   // Process request after validation and sanitization.
   asyncHandler(async (req, res, next) => {
-    console.log("req.body");
-    console.log(req.body);
-
     // Extract the validation errors from a request.
     const errors = validationResult(req);
 
@@ -76,10 +73,6 @@ exports.categoryCreatePost = [
     });
 
     if (!errors.isEmpty()) {
-      // Create a genre object with escaped and trimmed data.
-      console.log("Test Manufacturer");
-      console.log(newCategory);
-
       // There are errors. Render the form again with sanitized values/error messages.
       res.render("forms/category_form", {
         title: "Location Form Submission Failed",
@@ -90,12 +83,6 @@ exports.categoryCreatePost = [
       return;
     } else {
       // Create a genre object with escaped and trimmed data.
-      console.log("Validation succesfull");
-      console.log("Save new document");
-
-      console.log("newManufacturer");
-      console.log(newCategory);
-
       await newCategory.save();
 
       return res.redirect("../category");
@@ -103,18 +90,89 @@ exports.categoryCreatePost = [
   }),
 ];
 
+//! GET Category Update page
 exports.categoryUpdateGet = asyncHandler(async function (req, res, next) {
-  res.render("dev", { title: "This is the Category Update GET page" });
+  const theCategory = await Category.findById(req.params.id);
+
+  if (theCategory === null) {
+    // No results.
+    const err = new Error("Category not found");
+    err.status = 404;
+    return next(err);
+  }
+
+  res.render("forms/category_form", {
+    title: "This is the Category Update page",
+    oldCategory: theCategory,
+  });
 });
 
-exports.categoryUpdatePost = asyncHandler(async function (req, res, next) {
-  res.render("dev", { title: "This is the Category Update POST page" });
-});
+//! POST Category Update page
+exports.categoryUpdatePost = [
+  // Validate and sanitize the name field.
+  body("name")
+    .notEmpty()
+    .withMessage("Name must not be empty")
+    .trim()
+    .isLength({ min: 3, max: 20 })
+    .withMessage("Name must be between 3 and 20 characters")
+    .escape(),
+  body("description")
+    .notEmpty()
+    .withMessage("Description must not be empty")
+    .trim()
+    .isLength({ min: 1, max: 150 })
+    .withMessage("Description must be between 1 and 150 characters")
+    .escape(),
+
+  // Process request after validation and sanitization.
+  asyncHandler(async (req, res, next) => {
+    // Extract the validation errors from a request.
+    const errors = validationResult(req);
+
+    const newCategory = new Category({
+      _id: req.params.id ? req.params.id : undefined,
+      name: req.body.name || "",
+      description: req.body.description || "",
+    });
+
+    if (!errors.isEmpty()) {
+      // There are errors. Render the form again with sanitized values/error messages.
+      res.render("forms/category_form", {
+        title: "Location Update Failed",
+        text: "Please review and correct the following issues before submitting the form:",
+        oldCategory: newCategory,
+        errors: errors.array(),
+      });
+      return;
+    } else {
+      // Data from form is valid. Update the record.
+      const updatedCategory = await Category.findByIdAndUpdate(req.params.id, newCategory, {});
+
+      // Redirect to book detail page.
+      return res.redirect(updatedCategory.url);
+    }
+  }),
+];
 
 exports.categoryDeleteGet = asyncHandler(async function (req, res, next) {
-  res.render("dev", { title: "This is the Category Delete GET page" });
+  const theCategory = await Category.findById(req.params.id);
+
+  res.render("delete/delete_page", {
+    title: "This is the Category Delete GET page",
+    text: `Are you sure you want to delete '${theCategory.name}'`,
+    item: theCategory,
+  });
 });
 
 exports.categoryDeletePost = asyncHandler(async function (req, res, next) {
-  res.render("dev", { title: "This is the Category Delete POST page" });
+  // Get details of author and all their books (in parallel)
+  const theCategory = await Category.findById(req.params.id).exec();
+
+  // Redirect to Book List if there is no book to delete
+  if (theCategory === null) res.redirect("/category");
+
+  // Delete object and redirect to the list of books.
+  await Category.findByIdAndRemove(req.params.id);
+  res.redirect("/category");
 });
