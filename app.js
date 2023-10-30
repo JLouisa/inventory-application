@@ -6,6 +6,8 @@ const cookieParser = require("cookie-parser");
 const logger = require("morgan");
 const mongoose = require("mongoose");
 const dotenv = require("dotenv").config();
+const compression = require("compression");
+const helmet = require("helmet");
 
 //! Import Routes
 const indexRouter = require("./routes/index");
@@ -18,13 +20,31 @@ const manufacturersRouter = require("./routes/manufacturer");
 //! Express init
 const app = express();
 
+const RateLimit = require("express-rate-limit");
+const limiter = RateLimit({
+  windowMs: 1 * 60 * 1000,
+  max: 20,
+});
+
+app.use(limiter);
+
+app.use(
+  helmet.contentSecurityPolicy({
+    directives: {
+      "script-src": ["'self'", "code.jquery.com", "cdn.jsdelivr.net"],
+    },
+  })
+);
+
+app.use(compression());
+
 //! MongoDB Setup
 const cluster = process.env.MONGODB_CLUSTER;
 const host = process.env.MONGODB_HOST;
 const user = encodeURIComponent(process.env.MONGODB_USER);
 const pass = encodeURIComponent(process.env.MONGODB_PASS);
 
-const mongoDB = `mongodb+srv://${user}:${pass}@${cluster}${host}`;
+const mongoDB = process.env.MONGODB_URI || `mongodb+srv://${user}:${pass}@${cluster}${host}`;
 
 async function main(db) {
   await mongoose.connect(db);
