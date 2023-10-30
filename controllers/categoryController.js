@@ -182,7 +182,6 @@ exports.categoryDeleteGet = asyncHandler(async function (req, res, next) {
 
 //! POST Category Delete page
 exports.categoryDeletePost = asyncHandler(async function (req, res, next) {
-  console.log(req.body);
   const theCategory = await Category.findById(req.params.id).exec();
 
   // Redirect to Book List if there is no book to delete
@@ -190,7 +189,6 @@ exports.categoryDeletePost = asyncHandler(async function (req, res, next) {
 
   // Check secret key
   if (req.body.secretKey !== process.env.SECRECT_KEY) {
-    console.log("Secretkey matched");
     res.render("delete/no_delete_auth", {
       title: "This is the Category Delete GET page",
       text: `You can't delete '${theCategory.name}'`,

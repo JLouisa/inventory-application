@@ -108,8 +108,6 @@ exports.hardwareCreatePost = [
 
   // Process request after validation and sanitization.
   asyncHandler(async (req, res, next) => {
-    console.log(req.body);
-
     // Extract the validation errors from a request.
     const errors = validationResult(req);
 
@@ -146,11 +144,7 @@ exports.hardwareCreatePost = [
       });
       return;
     } else {
-      console.log("Validation succesfull");
-      console.log("Save new document");
-
       await newHardware.save();
-
       return res.redirect("/catalog");
     }
   }),
@@ -309,7 +303,6 @@ exports.hardwareDeletePost = asyncHandler(async function (req, res, next) {
 
   // Check secret key
   if (req.body.secretKey !== process.env.SECRECT_KEY) {
-    console.log("Secretkey matched");
     res.render("delete/no_delete_auth", {
       title: "This is the Category Delete GET page",
       text: `You can't delete delete '${theHardware.name}'`,

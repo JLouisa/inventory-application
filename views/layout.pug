@@ -8,7 +8,9 @@ html
   body
     nav
       div(class='logo') 
-        a(href='/') Computer Parts Shop
+        a(href='/') 
+          img(src="/images/logo.png", alt="logo icon")
+        p Computer Parts Shop
       ul(class="navItems")
         li
             a(href='/') Home
@@ -32,6 +34,8 @@ html
           a(href='/locations/create') Create Locations
       section(class='mainContent')
         block content
-
     footer
-      p © 2023 Jonathan Louisa
+      p
+        a(href="https://github.com/JLouisa/inventory-application" target="_blank") 
+          img(src="/images/github-original.svg" alt="github icon" class="github")
+        p © 2023 Jonathan Louisa

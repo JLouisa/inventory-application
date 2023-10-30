@@ -3,7 +3,7 @@ extends layout
 block content
   h1= theManufacturer.name
   p Address: #{theManufacturer.address}
-  p Joined Date: #{theManufacturer.joinedDate}
+  p Joined Date: #{theDate}
   p Products:
     ul
       each val in allProducts

@@ -3,6 +3,7 @@ const { body, validationResult } = require("express-validator");
 const Manufacturer = require("../models/manufacturer");
 const Hardware = require("../models/hardware");
 const Category = require("../models/category");
+const { DateTime } = require("luxon");
 
 //! GET all manufacturer page
 exports.manufacturers = asyncHandler(async function (req, res, next) {
@@ -22,6 +23,7 @@ exports.manufacturerDetails = asyncHandler(async function (req, res, next) {
 
   res.render("manufacturer_details", {
     theManufacturer: theManufacturer,
+    theDate: DateTime.fromJSDate(theManufacturer.joinedDate).toISODate(),
     allProducts: allProducts ? allProducts : "No Products listed",
   });
 });
@@ -32,7 +34,7 @@ exports.manufacturerCreateGet = asyncHandler(async function (req, res, next) {
 
   const newManufacturer = new Manufacturer({
     name: req.body.name || "",
-    joinedDate: req.body.joinedDate || "",
+    joinedDate: DateTime.fromJSDate(req.body.joinedDate).toISODate() || "",
     address: req.body.address || "",
     warranties: req.body.warranties || "",
   });
@@ -77,9 +79,6 @@ exports.manufacturerCreatePost = [
       Category.find().exec(),
     ]);
 
-    console.log("req.body");
-    console.log(req.body);
-
     // Extract the validation errors from a request.
     const errors = validationResult(req);
 
@@ -87,22 +86,19 @@ exports.manufacturerCreatePost = [
       // Create a genre object with escaped and trimmed data.
       const newManufacturer = new Manufacturer({
         name: req.body.name || "",
-        joinedDate: req.body.joinedDate || "",
+        joinedDate: DateTime.fromJSDate(req.body.joinedDate).toISODate() || "",
         address: req.body.address || "",
         warranties: req.body.warranties || "",
       });
 
       const new2Manufacturer = {
         name: req.body.name || "",
-        joinedDate: req.body.joinedDate || "",
+        joinedDate: DateTime.fromJSDate(req.body.joinedDate).toISODate() || "",
         address: req.body.address || "",
         warranties: {
           [theCategory.name]: req.body.warranties,
         },
       };
-
-      console.log("Test Manufacturer");
-      console.log(new2Manufacturer);
 
       // There are errors. Render the form again with sanitized values/error messages.
       res.render("forms/manufacturer_form", {
@@ -117,21 +113,14 @@ exports.manufacturerCreatePost = [
       // Create a genre object with escaped and trimmed data.
       const newManufacturer = new Manufacturer({
         name: req.body.name,
-        joinedDate: req.body.joinedDate,
+        joinedDate: DateTime.fromJSDate(req.body.joinedDate).toISODate(),
         address: req.body.address,
         warranties: {
           [theCategory.name]: req.body.warranties,
         },
       });
 
-      console.log("Validation succesfull");
-      console.log("Save new document");
-
-      console.log("newManufacturer");
-      console.log(newManufacturer);
-
       await newManufacturer.save();
-
       return res.redirect("../manufacturer");
     }
   }),
@@ -165,12 +154,10 @@ exports.manufacturerUpdateGet = asyncHandler(async function (req, res, next) {
   }
 
   const newWarranties = putInArr(theManufacturer.warranties);
-  console.log("newWarranties");
-  console.log(newWarranties);
 
   const new2Manufacturer = {
     name: theManufacturer.name || "",
-    joinedDate: theManufacturer.joinedDate || "",
+    joinedDate: DateTime.fromJSDate(theManufacturer.joinedDate).toISODate() || "",
     address: theManufacturer.address || "",
     warranties: newWarranties,
   };
@@ -210,7 +197,6 @@ exports.manufacturerUpdatePost = [
 
   // Process request after validation and sanitization.
   asyncHandler(async (req, res, next) => {
-    console.log(req.body);
     const [allCategories, theCategory] = await Promise.all([
       Category.find().exec(),
       Category.findById(req.body.category).exec(),
@@ -222,7 +208,7 @@ exports.manufacturerUpdatePost = [
     const newManufacturer = new Manufacturer({
       _id: req.params.id ? req.params.id : undefined,
       name: req.body.name || "",
-      joinedDate: req.body.joinedDate || "",
+      joinedDate: DateTime.fromJSDate(req.body.joinedDate).toISODate() || "",
       address: req.body.address || "",
       warranties:
         {
@@ -260,7 +246,7 @@ exports.manufacturerDeleteGet = asyncHandler(async function (req, res, next) {
 
   const newManufacturer = {
     Name: capitalizeFirstLetter(theManufacturer.name),
-    joinedDate: theManufacturer.joinedDate,
+    "Joined Date": DateTime.fromJSDate(theManufacturer.joinedDate).toISODate(),
     Address: theManufacturer.address,
   };
 
@@ -283,7 +269,6 @@ exports.manufacturerDeletePost = asyncHandler(async function (req, res, next) {
 
   // Check secret key
   if (req.body.secretKey !== process.env.SECRECT_KEY) {
-    console.log("Secretkey matched");
     res.render("delete/no_delete_auth", {
       title: "This is the Category Delete GET page",
       text: `You can't delete delete '${theManufacturer.name}'`,
